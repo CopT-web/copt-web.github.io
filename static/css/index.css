@@ -77,14 +77,21 @@ a:hover {
 }
 
 .publication-title {
-  max-width: 1060px;
+  max-width: 1120px;
   margin: 0 auto;
   color: var(--ink);
   font-family: 'Castoro', serif;
-  font-size: clamp(2.25rem, 4.45vw, 4.45rem);
+  font-size: clamp(2rem, 3.75vw, 3.85rem);
   font-weight: 500;
-  line-height: 1.04;
+  line-height: 1.12;
   letter-spacing: -0.045em;
+  text-align: center;
+}
+
+.publication-title .title-line {
+  display: block;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .brand-gradient {
