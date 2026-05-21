@@ -135,7 +135,7 @@
               \big[\log p_\theta(a_t\mid q,a_{\lt t})-\log p_\theta(a_t\mid q,e_{\lt t})\big].
               \]
             </div>
-            <p>Contrast discrete-token and continuous-embedding inputs to estimate answer reliability with a sequence-level KL.</p>
+            <p>Contrast the model's support for the same generated tokens under discrete-token and continuous-embedding inputs to estimate answer reliability via sequence-level KL.</p>
           </article>
           <article class="method-card">
             <span class="method-index">02</span>
@@ -145,7 +145,7 @@
               \kappa_a>\tau_a \Rightarrow r\sim p_\theta(r\mid a,q)
               \]
             </div>
-            <p>Perform subsequent on-policy thinking conditioned on the draft answer for reflection and correction when the answer is deemed insufficiently reliable.</p>
+            <p>Perform subsequent on-policy thinking conditioned on the draft answer for reflection and correction when the draft answer is deemed insufficiently reliable.</p>
           </article>
           <article class="method-card">
             <span class="method-index">03</span>
