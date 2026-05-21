@@ -35,7 +35,7 @@
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
-<body>
+<body id="top">
   <main>
     <section class="hero copt-hero">
       <div class="hero-body">
@@ -110,7 +110,7 @@
         <div class="glass-panel tldr-panel">
           <div class="section-eyebrow">TL;DR</div>
           <p>
-            <span class="brand-gradient inline-brand">CopT</span> is a reasoning pipeline with continuous-space verifiers, enabling LLMs to start with a draft answer and invoke on-policy thinking conditioned on it.
+            <span class="brand-gradient inline-brand">CopT</span> is a pipeline with continuous-space verifiers for math, coding, and agentic reasoning, enabling LLMs to start with a draft answer and perform on-policy thinking conditioned on it for reflection and correction.
           </p>
         </div>
       </div>
@@ -122,48 +122,47 @@
         <figure class="paper-figure method-figure">
           <img src="./static/images/method.png" alt="CopT methodology figure showing draft-answer reliability estimation and on-policy thinking with dynamic draft visibility">
           <figcaption>
-            CopT starts with a draft answer and performs on-policy thinking conditioned on it. It contrasts the model's support for the same chosen tokens under discrete and continuous inputs to estimate draft answer reliability, and during on-policy thinking, chunk by chunk, to determine the visibility of the draft answer across time steps.
+            <b>Overview of CopT workflow. </b>CopT starts with a draft answer and performs on-policy thinking conditioned on it. It contrasts the model's support for the same chosen tokens under discrete and continuous inputs to estimate draft answer reliability, and during on-policy thinking, chunk by chunk, to determine the visibility of the draft answer across time steps.
           </figcaption>
         </figure>
         <div class="method-grid">
           <article class="method-card">
             <span class="method-index">01</span>
-            <h3>Reliability Estimator</h3>
-            <div class="method-formula">
+            <h3>Reliability Estimator w/ Continuous Contrasts</h3>
+            <div class="method-formula reliability-formula">
               \[
               \kappa_a(a_{1:T_a}) := \frac{1}{T_a}\sum_{t=1}^{T_a}
-              \left[\log p_\theta(a_t\mid q,a_{\lt t})-\log p_\theta(a_t\mid q,e_{\lt t})\right].
+              \big[\log p_\theta(a_t\mid q,a_{\lt t})-\log p_\theta(a_t\mid q,e_{\lt t})\big].
               \]
             </div>
-            <p>Contrast discrete-token and continuous-embedding inputs to estimate answer reliability.</p>
+            <p>Contrast discrete-token and continuous-embedding inputs to estimate answer reliability with a sequence-level KL.</p>
           </article>
           <article class="method-card">
             <span class="method-index">02</span>
-            <h3>On-Policy Thinking</h3>
+            <h3>On-Policy Thinking Elicitation</h3>
             <div class="method-formula compact-formula">
               \[
               \kappa_a>\tau_a \Rightarrow r\sim p_\theta(r\mid a,q)
               \]
             </div>
-            <p>Invoke subsequent on-policy thinking conditioned on the draft answer for reflection and correction when the answer is deemed insufficiently reliable.</p>
+            <p>Perform subsequent on-policy thinking conditioned on the draft answer for reflection and correction when the answer is deemed insufficiently reliable.</p>
           </article>
           <article class="method-card">
             <span class="method-index">03</span>
-            <h3>Stability Estimator</h3>
+            <h3>Stability Estimator w/ Continuous Contrasts</h3>
             <div class="method-formula long-formula">
               \[
               \begin{aligned}
-              \kappa_r^{(k)}(r_{s_k:s_k+C-1}) := \frac{1}{C}\sum_{t=s_k}^{s_k+C-1}
-              \big[&\log p_\theta(r_t\mid q,a^{(m_k)},r_{T_a+1:t-1})\\
+              \kappa_r^{(k)}(r_{s_k:s_k+C-1}) := \frac{1}{C}\sum_{t=s_k}^{s_k+C-1}\big[&\log p_\theta(r_t\mid q,a^{(m_k)},r_{T_a+1:t-1})\\
               &-\log p_\theta(r_t\mid q,a^{(m_k)},r_{T_a+1:s_k-1};e_{s_k:t-1})\big].
               \end{aligned}
               \]
             </div>
-            <p>A second estimator for assessing whether thinking chunks remain stable under continuous inputs.</p>
+            <p>Assess whether thinking chunks remain stable under continuous inputs with a second sequence-level KL.</p>
           </article>
           <article class="method-card">
             <span class="method-index">04</span>
-            <h3>Visibility Control</h3>
+            <h3>Draft Answer Visibility Control </h3>
             <div class="method-formula compact-formula">
               \[
               m_{k+1}=\begin{cases}
@@ -185,22 +184,22 @@
           <div class="result-card">
             <span>Math & STEM, up to</span>
             <strong>+3.34%</strong>
-            <p>Accuracy at the same or lower token usage.</p>
+            <p>Accuracy at the same or lower token usage</p>
           </div>
           <div class="result-card">
             <span>Coding, up to</span>
             <strong>+6.67%</strong>
-            <p>Accuracy at the same or lower token usage.</p>
+            <p>Accuracy at the same or lower token usage</p>
           </div>
           <div class="result-card">
             <span>Agentic, up to</span>
             <strong>+23.03%</strong>
-            <p>Accuracy at the same or lower token usage.</p>
+            <p>Accuracy at the same or lower token usage</p>
           </div>
           <div class="result-card">
             <span>Token Usage, up to</span>
             <strong>-55% / -57% / -45%</strong>
-            <p>At the same or higher Math / Coding / Agentic reasoning accuracy.</p>
+            <p>At the same or higher Math / Coding / Agentic reasoning accuracy</p>
           </div>
         </div>
       </div>
@@ -211,10 +210,9 @@
         <h2 class="title is-3 section-title">Key Notes</h2>
         <div class="content glass-panel">
           <ul class="clean-list">
-            <li><b>Reverse Order:</b> CopT reverses the usual order of thinking and answering by eliciting a draft answer and invoking on-policy thinking conditioned on it. This provides earlier access to answers and avoids unnecessary token consumption.</li>
+            <li><b>Reverse Order:</b> CopT reverses the usual order of thinking and answering by eliciting a draft answer and performing on-policy thinking conditioned on it. This provides earlier access to answers and avoids unnecessary token consumption.</li>
             <li><b>Continuous Verifier:</b> Unlike methods that directly use continuous embeddings as a medium for generation, CopT recasts them as inference-time verifiers. This allows CopT to use uncertainty information preserved by continuous embeddings as in latent reasoning while retaining the readability of explicit reasoning.</li>
-            <li><b>Overhead:</b> The estimators are calculated from already generated sequences, and the corresponding probabilities are obtained in parallel with a single forward pass. Thus, it incurs only small overhead once the chosen-token probabilities and continuous embeddings are cached online during generation.</li>
-            <li><b>Overhead:</b> The estimators are calculated from already generated sequences, and the corresponding probabilities are obtained in parallel with a single forward pass. Therefore, it incurs only small overhead once the chosen-token probabilities and continuous embeddings are cached online during generation.</li>
+            <li><b>Overhead:</b> The estimators are calculated from already generated sequences, and the corresponding probabilities are obtained in parallel with a single forward pass. Therefore, CopT incurs only small overhead once the chosen-token probabilities and continuous embeddings are cached online during generation.</li>
             <li><b>Theoretical Analysis:</b> The expected estimate equals the mutual information between the unresolved latent state and the emitted answer token. In other words, CopT measures answer-relevant uncertainty rather than uncertainty over latent reasoning states themselves.</li>
           </ul>
         </div>
@@ -236,5 +234,12 @@
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="footer-copy"><span>©</span><span> 2026 CopT Authors</span></div>
+  </footer>
+  <a class="back-to-top" href="#top" aria-label="Back to Top" title="Back to top">
+    <span aria-hidden="true">🚀</span>
+  </a>
 </body>
 </html>
